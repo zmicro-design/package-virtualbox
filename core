@@ -1,0 +1,23 @@
+#!/bin/bash
+
+install() {
+  # get system os/arch
+  local arch="$PACKAGE_OS_ARCH"
+  local kernel="$PACKAGE_OS_KERNEL"
+  local platform="$PACKAGE_OS_PLATFORM"
+  # usr_bin_dir
+  local usr_bin_dir="$PACKAGE_USER_BIN_DIR"
+  local tmp_dir="$PACKAGE_TMP_DIR"
+
+  # reference: https://developer.hashicorp.com/vagrant/downloads
+  if [ "$(os::is_macos)" = "true" ]; then
+    pm install --cask virtualbox
+  elif [ "$(os::is_ubuntu)" = "true" ]; then
+    pm update && pm install virtualbox virtualbox-dkms
+  else
+    log::error "unsupported operating system"
+    return 1
+  fi
+}
+
+export -f install
